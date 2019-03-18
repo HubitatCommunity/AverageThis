@@ -4,7 +4,7 @@
         "author":  " cSteele",
         "versions": {
                 "Application": {
-             	"AverageThis": 0.9
+             	"AverageThis": "0.9"
                 },
                 "Driver": {
                 },
