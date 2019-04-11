@@ -28,9 +28,12 @@ definition (
 )
 
 
-preferences {
-	page name: "mainPage", title: "", install: true, uninstall: true // ,submitOnChange: true      
-} 
+// Preference pages
+preferences
+{
+	page(name: "mainPage")
+}
+
 
 // App Version   ***** with great thanks and acknowlegment to Cobra (CobraVmax) for his original version checking code ********
 def setVersion() {
@@ -39,54 +42,48 @@ def setVersion() {
 	state.Type = "Application"
 }
 
-def subscribeSelected() {
-	if (debugOutput) log.debug "subscribeSelected: $illumSensors"
-	if (illumSensors?.size()) { subscribe(illumSensors, "illuminance", illumHandler) }
-}
-
-def illumHandler(evt) {
-	if (debugOutput) log.debug "illumHandler: $evt.device, $evt.value"
-	// (new illum + (cnt * avg)) / cnt+1 ==> avg & cnt+1
-	def float a = state.avg
-	def float n = state.cnt * a + Float.parseFloat(evt.value)
-	state.cnt += 1
-	a = n / state.cnt
-	state.avg = a.round()
-	if(vDevice.supportedCommands.find{it.toString() == "setIlluminance"}) { settings.vDevice.setIlluminance("${state.avg}") }
-	else { log.warn "Is Incorrect vDevice" }
-}
 
 def installed() {
 	log.info "Installed with settings: ${settings}"
 	initialize()
 }
 
+
 def updated() {
 	log.info "Updated with settings: ${settings}"
 	unschedule()
 	unsubscribe()
-	if (debugOutput) runIn(1800,logsOff)
 	initialize()
 }
 
+
 def initialize() {
 	version()
-	if (state.avg == null) { state.avg = 0; state.cnt = 0; state.sum = 0; }
-	subscribeSelected()
+	log.info "There are ${childApps.size()} child Apps"
+	childApps.each {child -> log.info "Child app: ${child.label}" }
 }
 
+
 def mainPage() {
-    dynamicPage(name: "mainPage") {
+	dynamicPage(name: "mainPage", uninstall: true, install: true)
+	{
 		section(getFormat("title", " ${app.label}")) {}
-		section{paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Illuminance (Lux) sensors.</div>"    
-		input "vDevice", "capability.accelerationSensor", title: "Choose a Virtual Device to receive the Average.<i>(must support Illuminance)</i>"
-		input "illumSensors", "capability.illuminanceMeasurement", title: "Choose Illuminance Sensors include in an Average", multiple: true
+		section
+		{
+			paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Omni sensors.</div>"    
+			paragraph title: "<AverageThis",
+			"<b>This parent app is a container for all:</b><br> AverageThis child apps"
+		}
+		section 
+		{
+			app(name: "AverageThisChild", appName: "AverageThisChild", namespace: "csteele", title: "New AverageThis child", multiple: true)
+		}    
+		section (title: "<b>Name/Rename</b>") 
+		{
+			label title: "Enter a name for this parent app (optional)", required: false
+		} 
+		display()
 	}
-	section{
-		input "debugOutput", "bool", title: "Enable Debug Logging?", required: false
-	}
-      display()
-    } 
 }
 
 
@@ -98,11 +95,6 @@ def display() {
     }
 }
 
-
-def logsOff() {
-    log.warn "debug logging disabled..."
-    app?.updateSetting("debugOutput",[value:"false",type:"bool"])
-}
 
 def getFormat(type, myText=""){
     if(type == "header-green") return "<div style='color:#ffffff;font-weight: bold;background-color:#81BC00;border: 1px solid;box-shadow: 2px 3px #A9A9A9'>${myText}</div>"
