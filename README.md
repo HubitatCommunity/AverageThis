@@ -1,14 +1,18 @@
 # AverageThis
 
-Calculates a Rolling Average of a set of Illuminance Sensors into a virtual sensor of your choice.
+Calculates a Rolling Average of Illuminance, Temperature and Relative Humidity from a set of Omni Sensors into a virtual sensor of your choice.
 
 Create a Virtual OmniSensor, or equivilant. 
-In AverageThis, select your virtual device, then
+In AverageThis, create a child instance 
+Select your virtual device, then
 Select one or more Illuminance sensors.
+Rename the child as needed.
 Click Done.
 
-AverageThis receives every Illuminance update your selected devices send and adds it to the existing Average, per the formula:
-"Thus the current cumulative average for a new datum point is equal to the previous cumulative average, times n, plus the latest datum point, all divided by the number of points received so far, n+1."
+AverageThis receives every Illuminance, Temperature and Relative Humidity update from your selected devices and adds it to the existing Average, per the formula:
+"avg -= avg / N;
+ avg += new_sample / N;"
+Where N is 200, approximating 200 samples into the past.
 
 Your selected Illuminance devices establish the period or repetition of the samples added to the rolling average.
 
