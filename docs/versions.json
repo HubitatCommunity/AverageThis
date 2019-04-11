@@ -4,14 +4,16 @@
         "author":  " cSteele",
         "versions": {
                 "Application": {
-             	"AverageThis": "1.0"
+             	        "AverageThis": "1.0"
+                        "AverageThisChild": "1.0"
                 },
                 "Driver": {
                 },
 
                 "UpdateInfo": {
                         "Application": {
-             			"AverageThis": "Last updated: 03/18/2019"
+             			"AverageThis": "Last updated: 04/11/2019"
+                                "AverageThisChild": "Last updated 04/11/2019
                         },
                         "Driver": {
                         }
