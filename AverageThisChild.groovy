@@ -64,7 +64,6 @@ def illumHandler(evt) {
 	avL -= avL / 200
 	avL += Float.parseFloat(evt.value) / 200
 	state.avgL = avL
-	log.debug "alt: $avL"
 	
 	if(vDevice.supportedCommands.find{it.toString() == "setIlluminance"}) { settings.vDevice.setIlluminance("${state.avgL.round(1)}"); sendEvent(name: "illuminance", value: state.avgL, displayed: true)  }
 	else { log.warn "Is Incorrect vDevice" }
@@ -72,16 +71,10 @@ def illumHandler(evt) {
 
 def tempHandler(evt) {
 	if (debugOutput) log.debug "tempHandler: $evt.device, $evt.value, ($state.avgT)"
-	/* exponentially weighted average
-	    avg -= avg / N;
-    	    avg += new_sample / N;	
-	 when N=1 avg = the latest value. When N > 100 is approximately the number of previous values to average
-	 */	 
 	def float avT = state.avgT
 	avT -= avT / 200
 	avT += Float.parseFloat(evt.value) / 200
 	state.avgT = avT
-	log.debug "alt: $avT"
 	
 	if(vDevice.supportedCommands.find{it.toString() == "setTemperature"}) { settings.vDevice.setTemperature("${state.avgT.round(1)}"); sendEvent(name: "temperature", value: state.avgT, displayed: true)  }
 	else { log.warn "Is Incorrect vDevice" }
@@ -89,16 +82,10 @@ def tempHandler(evt) {
 
 def humidHandler(evt) {
 	if (debugOutput) log.debug "humidHandler: $evt.device, $evt.value, ($state.avgH)"
-	/* exponentially weighted average
-	    avg -= avg / N;
-    	    avg += new_sample / N;	
-	 when N=1 avg = the latest value. When N > 100 is approximately the number of previous values to average
-	 */	 
 	def float avH = state.avgH
 	avH -= avH / 200
 	avH += Float.parseFloat(evt.value) / 200
 	state.avgH = avH
-	log.debug "alt: $avH"
 	
 	if(vDevice.supportedCommands.find{it.toString() == "setRelativeHumidity"}) { settings.vDevice.setRelativeHumidity("${state.avgH.round(1)}"); sendEvent(name: "humidity", value: state.avgH, displayed: true)  }
 	else { log.warn "Is Incorrect vDevice" }
