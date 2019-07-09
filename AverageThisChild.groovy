@@ -112,6 +112,9 @@ def initialize() {
 	if (state.avgT == null) state.avgT = 68
 	if (state.avgH == null) state.avgH = 50
 	subscribeSelected()
+//    state.remove("version")
+//    state.remove("Version")
+//    state.remove("Copyright")
 }
 
 def mainPage() 
@@ -142,7 +145,7 @@ def mainPage()
 def display() {
     section{
 	   paragraph getFormat("line")
-	   paragraph "<div style='color:#1A77C9;text-align:center;font-weight:small;font-size:9px'>Developed by: C Steele<br/>Version Status: $state.status<br>Current Version: $state.version -  $state.Copyright</div>"
+	   paragraph "<div style='color:#1A77C9;text-align:center;font-weight:small;font-size:9px'>Developed by: C Steele<br/>Version Status: $state.status<br>Current Version: ${version()} -  ${thisCopyright}</div>"
     }
 }
 
@@ -200,7 +203,7 @@ def updateCheckHandler(resp, data) {
 		else
 		{ 
 		    state.Status = "Current"
-		    log.info "You are using the current version of this driver"
+		    log.info "You are using the current version of this Application"
 		}
 	
 	      if(state.Status == "Current")

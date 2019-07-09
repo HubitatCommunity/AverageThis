@@ -55,6 +55,9 @@ def updated() {
 def initialize() {
 	log.info "There are ${childApps.size()} child Apps"
 	childApps.each {child -> log.info "Child app: ${child.label}" }
+//    state.remove("version")
+//    state.remove("Version")
+//    state.remove("Copyright")
 }
 
 
@@ -84,7 +87,7 @@ def mainPage() {
 def display() {
     section{
 	   paragraph getFormat("line")
-	   paragraph "<div style='color:#1A77C9;text-align:center;font-weight:small;font-size:9px'>Developed by: C Steele<br/>Version Status: $state.status<br>Current Version: $state.version -  $state.Copyright</div>"
+	   paragraph "<div style='color:#1A77C9;text-align:center;font-weight:small;font-size:9px'>Developed by: C Steele<br/>Version Status: $state.status<br>Current Version: ${version()} -  ${thisCopyright}</div>"
     }
 }
 
@@ -136,7 +139,7 @@ def updateCheckHandler(resp, data) {
 		else
 		{ 
 		    state.Status = "Current"
-		    log.info "You are using the current version of this driver"
+		    log.info "You are using the current version of this Application"
 		}
 	
 	      if(state.Status == "Current")
