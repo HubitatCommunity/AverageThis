@@ -124,18 +124,18 @@ def mainPage()
 	dynamicPage(name: "mainPage", uninstall: true, install: true) 
 	{
 		section(getFormat("title", " ${app.label}")) {}
-		section{paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Illuminance (Lux) sensors.</div>"    
+		section {  paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Illuminance (Lux) sensors.</div>"    
 		input "vDevice", "capability.accelerationSensor", title: "Choose a Virtual Device to receive the Average.<i>(must support Illuminance)</i>"
 		input "illumSensors", "capability.illuminanceMeasurement", title: "Choose Illuminance Sensors include in an Average", multiple: true
 		input (name: "numberOption", type: "number", defaultValue: "10", range: "10..200", title: "Number of Samples to average.", description: "10 samples will be very responsive, while 200 samples is quite slow.", required: true)
 
-	}
-      section (title: "<b>Name/Rename</b>") {
-      	label title: "This child app's Name (optional)", required: false
-		input "debugOutput", "bool", title: "Enable Debug Logging?", required: false
-	}
-      display()
-    } 
+		}
+      	section (title: "<b>Name/Rename</b>") {
+      		label title: "This child app's Name (optional)", required: false
+			input "debugOutput", "bool", title: "Enable Debug Logging?", required: false
+		}
+      	display()
+	} 
 }
 
 
