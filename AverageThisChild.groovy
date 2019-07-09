@@ -200,7 +200,7 @@ def updateCheckHandler(resp, data) {
 		else
 		{ 
 		    state.Status = "Current"
-		    if (descTextEnable) log.info "You are using the current version of this driver"
+		    log.info "You are using the current version of this driver"
 		}
 	
 	      if(state.Status == "Current")
