@@ -102,11 +102,11 @@ def updated() {
 	if (debugOutput) runIn(1800,logsOff)
 	if (debugOutput) log.debug "   Supported Commands of $vDevice:${vDevice.supportedCommands}"
 	schedule("0 0 8 ? * FRI *", updateCheck)
+	updateCheck()
 	initialize()
 }
 
 def initialize() {
-	version()
 	// an inital value of 0 will take a long time to average out, thus avg is initialized to an arbitrary indoor average
 	if (state.avgL == null) state.avgL = 68
 	if (state.avgT == null) state.avgT = 68
@@ -151,6 +151,7 @@ def logsOff() {
     log.warn "debug logging disabled..."
     app?.updateSetting("debugOutput",[value:"false",type:"bool"])
 }
+
 
 def getFormat(type, myText=""){
     if(type == "header-green") return "<div style='color:#ffffff;font-weight: bold;background-color:#81BC00;border: 1px solid;box-shadow: 2px 3px #A9A9A9'>${myText}</div>"
