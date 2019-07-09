@@ -1,18 +1,18 @@
 {
-    "Comment": "Last updated: 03/18/2019",
+    "Comment": "",
     "copyright": " &#9400; 2018 C Steele",
     "author": " cSteele",
     "versions": {
         "Application": {
             "AverageThis": "1.0",
-            "AverageThisChild": "1.0"
+            "AverageThisChild": "1.1"
         },
         "Driver": {},
 
         "UpdateInfo": {
             "Application": {
                 "AverageThis": "Last updated: 04/11/2019",
-                "AverageThisChild": "Last updated 04/11/2019"
+                "AverageThisChild": "Last updated 07/09/2019"
             },
             "Driver": {}
         }
