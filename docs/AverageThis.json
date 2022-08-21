@@ -1,0 +1,30 @@
+{
+  "packageName": "AverageThis",
+  "author": "csteele",
+  "dateReleased": "2020-10-11",
+  "releaseNotes": "",
+  "documentationLink": "https://github.com/HubitatCommunity/AverageThis/blob/master/README.md",
+  "communityLink": "",
+  "apps": [
+    {
+      "id": "ca375562-d2f2-45e9-8f29-2aa5936ddc00",
+      "name": "AverageThis",
+      "namespace": "csteele",
+      "location": "https://raw.githubusercontent.com/HubitatCommunity/AverageThis/master/AverageThis.groovy",
+      "version": "1.1.0",
+      "oauth": false,
+      "primary": true,
+      "required": true
+    },
+    {
+      "id": "d8d2eb33-27f0-43e0-8d19-644e816b42dd",
+      "name": "AverageThisChild",
+      "namespace": "csteele",
+      "location": "https://raw.githubusercontent.com/HubitatCommunity/AverageThis/master/AverageThisChild.groovy",
+      "version": "1.1.0",
+      "oauth": false,
+      "primary": false,
+      "required": true
+    }
+  ]
+}
