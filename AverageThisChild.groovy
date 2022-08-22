@@ -1,7 +1,7 @@
 /**
  *  Hubitat Import URL: https://raw.githubusercontent.com/HubitatCommunity/AverageThis/master/AverageThis.groovy
  *
- *  Average Illuminance, temperature, Relative Humidity
+ *  Average Illuminance, Temperature, Relative Humidity
  *
  *  Copyright 2019 C Steele
  *
@@ -15,7 +15,7 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- public static String version()      {  return "v1.1"  }
+ public static String version()      {  return "v1.2"  }
 
 definition (
 	name: "AverageThisChild",
@@ -35,7 +35,6 @@ preferences
 {
 	page(name: "mainPage")
 }
-
 
 
 def subscribeSelected() {
@@ -101,8 +100,6 @@ def updated() {
 	unsubscribe()
 	if (debugOutput) runIn(1800,logsOff)
 	if (debugOutput) log.debug "   Supported Commands of $vDevice:${vDevice.supportedCommands}"
-	schedule("0 0 8 ? * FRI *", updateCheck)
-	updateCheck()
 	initialize()
 }
 
@@ -112,9 +109,6 @@ def initialize() {
 	if (state.avgT == null) state.avgT = 68
 	if (state.avgH == null) state.avgH = 50
 	subscribeSelected()
-//    state.remove("version")
-//    state.remove("Version")
-//    state.remove("Copyright")
 }
 
 def mainPage() 
@@ -127,18 +121,17 @@ def mainPage()
 	dynamicPage(name: "mainPage", uninstall: true, install: true) 
 	{
 		section(getFormat("title", " ${app.label}")) {}
-		section {  paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Illuminance (Lux) sensors.</div>"    
+		section{paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Omni sensors.</div>"    
 		input "vDevice", "capability.accelerationSensor", title: "Choose a Virtual Device to receive the Average.<i>(must support Illuminance)</i>"
-		input "illumSensors", "capability.illuminanceMeasurement", title: "Choose Illuminance Sensors include in an Average", multiple: true
+		input "illumSensors", "capability.illuminanceMeasurement", title: "Choose Omni Sensors to include in an Average", multiple: true
 		input (name: "numberOption", type: "number", defaultValue: "10", range: "10..200", title: "Number of Samples to average.", description: "10 samples will be very responsive, while 200 samples is quite slow.", required: true)
-
-		}
-      	section (title: "<b>Name/Rename</b>") {
-      		label title: "This child app's Name (optional)", required: false
-			input "debugOutput", "bool", title: "Enable Debug Logging?", required: false
-		}
-      	display()
-	} 
+	}
+      section (title: "<b>Name/Rename</b>") {
+      	label title: "This child app's Name (optional)", required: false
+		input "debugOutput", "bool", title: "Enable Debug Logging?", required: false
+	}
+      display()
+    } 
 }
 
 
@@ -160,68 +153,6 @@ def getFormat(type, myText=""){
     if(type == "header-green") return "<div style='color:#ffffff;font-weight: bold;background-color:#81BC00;border: 1px solid;box-shadow: 2px 3px #A9A9A9'>${myText}</div>"
     if(type == "line") return "\n<hr style='background-color:#1A77C9; height: 1px; border: 0;'></hr>"
     if(type == "title") return "<h2 style='color:#1A77C9;font-weight: bold'>${myText}</h2>"
-}
-
-
-// Check Version   ***** with great thanks and acknowlegment to Cobra (CobraVmax) for his original code ****
-def updateCheck()
-{    
-	
-	def paramsUD = [uri: "https://hubitatcommunity.github.io/AverageThis/versions.json"]
-
- 	asynchttpGet("updateCheckHandler", paramsUD) 
-}
-
-def updateCheckHandler(resp, data) {
-
-	state.InternalName = "AverageThisChild"
-
-	if (resp.getStatus() == 200 || resp.getStatus() == 207) {
-		respUD = parseJson(resp.data)
-		// log.warn " Version Checking - Response Data: $respUD"   // Troubleshooting Debug Code - Uncommenting this line should show the JSON response from your webserver 
-		state.Copyright = "${thisCopyright}"
-		def newVerRaw = (respUD.versions.Application.(state.InternalName))
-		def newVer = (respUD.versions.Application.(state.InternalName).replaceAll("[.vV]", ""))
-		def currentVer = version().replaceAll("[.vV]", "")   
-		state.UpdateInfo = (respUD.versions.UpdateInfo.Application.(state.InternalName))
-	
-		if(newVer == "NLS")
-		{
-		      state.Status = "<b>** This driver is no longer supported by $respUD.author  **</b>"       
-		      log.warn "** This driver is no longer supported by $respUD.author **"      
-		}           
-		else if(currentVer < newVer)
-		{
-		      state.Status = "<b>New Version Available (Version: $newVerRaw)</b>"
-		      log.warn "** There is a newer version of this Application available  (Version: $newVerRaw) **"
-		      log.warn "** $state.UpdateInfo **"
-		} 
-		else if(currentVer > newVer)
-		{
-		      state.Status = "<b>You are using a Test version of this Application (Version: $newVerRaw)</b>"
-		}
-		else
-		{ 
-		    state.Status = "Current"
-		    log.info "You are using the current version of this Application"
-		}
-	
-	      if(state.Status == "Current")
-	      {
-	           state.UpdateInfo = "N/A"
-	           sendEvent(name: "CodeUpdate", value: state.UpdateInfo)
-	           sendEvent(name: "CodeStatus", value: state.Status)
-	      }
-	      else 
-	      {
-	           sendEvent(name: "CodeUpdate", value: state.UpdateInfo)
-	           sendEvent(name: "CodeStatus", value: state.Status)
-	      }
-      }
-      else
-      {
-           log.error "Something went wrong: CHECK THE JSON FILE AND IT'S URI"
-      }
 }
 
 def getThisCopyright(){"&copy; 2019 C Steele "}
