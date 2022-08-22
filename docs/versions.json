@@ -4,8 +4,8 @@
     "author": " cSteele",
     "versions": {
         "Application": {
-            "AverageThis": "1.1",
-            "AverageThisChild": "1.1"
+            "AverageThis": "1.2",
+            "AverageThisChild": "1.2"
         },
         "Driver": {},
 
