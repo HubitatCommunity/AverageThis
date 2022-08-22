@@ -15,13 +15,13 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- public static String version()      {  return "v1.1"  }
+	public static String version()      {  return "v1.2"  }
 
 definition (
 	name: "AverageThis",
 	namespace: "csteele",
 	author: "C Steele",
-	description: "Average a set of Illuminance (Lux) sensors.",
+	description: "Average a set of Sensors into a Virtual Sensor.",
 	category: "Averaging",
 	iconUrl: "",
 	iconX2Url: "",
@@ -45,19 +45,15 @@ def installed() {
 def updated() {
 	log.info "Updated with settings: ${settings}"
 	unschedule()
-	schedule("0 0 8 ? * FRI *", updateCheck)
 	unsubscribe()
-	updateCheck()
 	initialize()
 }
 
 
 def initialize() {
+	version()
 	log.info "There are ${childApps.size()} child Apps"
 	childApps.each {child -> log.info "Child app: ${child.label}" }
-//    state.remove("version")
-//    state.remove("Version")
-//    state.remove("Copyright")
 }
 
 
@@ -67,13 +63,14 @@ def mainPage() {
 		section(getFormat("title", " ${app.label}")) {}
 		section
 		{
-			paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Omni sensors.</div>"    
+			paragraph "<div style='color:#1A77C9'>Calculate a Rolling Average of a set of Sensor values into a Virtual Sensor.</div>"    
 			paragraph title: "<AverageThis",
 			"<b>This parent app is a container for all:</b><br> AverageThis child apps"
 		}
 		section 
 		{
-			app(name: "AverageThisChild", appName: "AverageThisChild", namespace: "csteele", title: "New AverageThis child", multiple: true)
+			app(name: "AverageThisChild", appName: "AverageThisChild", namespace: "csteele", title: "<b>New AverageThis child</b>", multiple: true)
+			app(name: "AverageThisPower", appName: "AverageThisPower", namespace: "csteele", title: "<b>New AverageThisPower child</b>", multiple: true)
 		}    
 		section (title: "<b>Name/Rename</b>") 
 		{
@@ -99,65 +96,4 @@ def getFormat(type, myText=""){
 }
 
 
-// Check Version   ***** with great thanks and acknowlegment to Cobra (CobraVmax) for his original code ****
-def updateCheck()
-{    
-	
-     def paramsUD = [uri: "https://hubitatcommunity.github.io/AverageThis/versions.json"]
-	
- 	asynchttpGet("updateCheckHandler", paramsUD) 
-}
-
-def updateCheckHandler(resp, data) {
-
-	state.InternalName = "AverageThis"
-
-	if (resp.getStatus() == 200 || resp.getStatus() == 207) {
-		respUD = parseJson(resp.data)
-		// log.warn " Version Checking - Response Data: $respUD"   // Troubleshooting Debug Code - Uncommenting this line should show the JSON response from your webserver 
-		state.Copyright = "${thisCopyright}"
-		def newVerRaw = (respUD.versions.Application.(state.InternalName))
-		def newVer = (respUD.versions.Application.(state.InternalName).replaceAll("[.vV]", ""))
-		def currentVer = version().replaceAll("[.vV]", "")   
-		state.UpdateInfo = (respUD.versions.UpdateInfo.Application.(state.InternalName))
-	
-		if(newVer == "NLS")
-		{
-		      state.Status = "<b>** This driver is no longer supported by $respUD.author  **</b>"       
-		      log.warn "** This driver is no longer supported by $respUD.author **"      
-		}           
-		else if(currentVer < newVer)
-		{
-		      state.Status = "<b>New Version Available (Version: $newVerRaw)</b>"
-		      log.warn "** There is a newer version of this Application available  (Version: $newVerRaw) **"
-		      log.warn "** $state.UpdateInfo **"
-		} 
-		else if(currentVer > newVer)
-		{
-		      state.Status = "<b>You are using a Test version of this Application (Version: $newVerRaw)</b>"
-		}
-		else
-		{ 
-		    state.Status = "Current"
-		    log.info "You are using the current version of this Application"
-		}
-	
-	      if(state.Status == "Current")
-	      {
-	           state.UpdateInfo = "N/A"
-	           sendEvent(name: "CodeUpdate", value: state.UpdateInfo)
-	           sendEvent(name: "CodeStatus", value: state.Status)
-	      }
-	      else 
-	      {
-	           sendEvent(name: "CodeUpdate", value: state.UpdateInfo)
-	           sendEvent(name: "CodeStatus", value: state.Status)
-	      }
-      }
-      else
-      {
-           log.error "Something went wrong: CHECK THE JSON FILE AND IT'S URI"
-      }
-}
-
-def getThisCopyright(){"&copy; 2019 C Steele "}
+def getThisCopyright(){"&copy; 2020 C Steele "}
