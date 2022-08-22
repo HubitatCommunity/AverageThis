@@ -2,7 +2,7 @@
   "packageName": "AverageThis",
   "author": "csteele",
   "dateReleased": "2020-10-11",
-  "releaseNotes": "",
+  "releaseNotes": "v1.2 added AverageThisPower child.",
   "documentationLink": "https://github.com/HubitatCommunity/AverageThis/blob/master/README.md",
   "communityLink": "",
   "apps": [
@@ -11,7 +11,7 @@
       "name": "AverageThis",
       "namespace": "csteele",
       "location": "https://raw.githubusercontent.com/HubitatCommunity/AverageThis/master/AverageThis.groovy",
-      "version": "1.1.0",
+      "version": "1.2",
       "oauth": false,
       "primary": true,
       "required": true
@@ -21,7 +21,17 @@
       "name": "AverageThisChild",
       "namespace": "csteele",
       "location": "https://raw.githubusercontent.com/HubitatCommunity/AverageThis/master/AverageThisChild.groovy",
-      "version": "1.1.0",
+      "version": "1.2",
+      "oauth": false,
+      "primary": false,
+      "required": true
+    },
+    {
+      "id": "edd1a701-0510-43ee-8357-e81435212cea",
+      "name": "AverageThisPower",
+      "namespace": "csteele",
+      "location": "https://raw.githubusercontent.com/HubitatCommunity/AverageThis/master/AverageThisPower.groovy",
+      "version": "1.0",
       "oauth": false,
       "primary": false,
       "required": true
