@@ -15,7 +15,7 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
- public static String version()      {  return "v1.2"  }
+ public static String version()      {  return "v1.3"  }
 
 definition (
 	name: "AverageThisChild",
@@ -60,8 +60,8 @@ def illumHandler(evt) {
 	avL += Float.parseFloat(evt.value) / NSample
 	state.avgL = avL
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setIlluminance"}) { settings.vDevice.setIlluminance("${state.avgL.round(1)}"); sendEvent(name: "illuminance", value: state.avgL, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	if(vDevice.supportedCommands.find{it.toString() == "setIlluminance"}) { settings.vDevice.setIlluminance("${state.avgL.round(1)}"); sendEvent(name: "illuminance", value: state.avgL, unit: "lux", displayed: true)  }
+	else { log.warn "Is Incorrect vDevice - no Illuminance" }
 }
 
 def tempHandler(evt) {
@@ -72,8 +72,8 @@ def tempHandler(evt) {
 	avT += Float.parseFloat(evt.value) / NSample
 	state.avgT = avT
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setTemperature"}) { settings.vDevice.setTemperature("${state.avgT.round(1)}"); sendEvent(name: "temperature", value: state.avgT, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	if(vDevice.supportedCommands.find{it.toString() == "setTemperature"}) { settings.vDevice.setTemperature("${state.avgT.round(1)}"); sendEvent(name: "temperature", value: state.avgT, unit:"°${location.temperatureScale}", displayed: true)  }
+	else { log.warn "Is Incorrect vDevice - no Temperature" }
 }
 
 def humidHandler(evt) {
@@ -84,8 +84,8 @@ def humidHandler(evt) {
 	avH += Float.parseFloat(evt.value) / NSample
 	state.avgH = avH
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setRelativeHumidity"}) { settings.vDevice.setRelativeHumidity("${state.avgH.round(1)}"); sendEvent(name: "humidity", value: state.avgH, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	if(vDevice.supportedCommands.find{it.toString() == "setRelativeHumidity"}) { settings.vDevice.setRelativeHumidity("${state.avgH.round(1)}"); sendEvent(name: "humidity", value: state.avgH, unit: "%", displayed: true)  }
+	else { log.warn "Is Incorrect vDevice - no Humidity" }
 }
 
 
@@ -106,7 +106,7 @@ def updated() {
 def initialize() {
 	// an inital value of 0 will take a long time to average out, thus avg is initialized to an arbitrary indoor average
 	if (state.avgL == null) state.avgL = 68
-	if (state.avgT == null) state.avgT = 68
+	if (state.avgT == null) state.avgT = location.temperatureScale == "F" ? 68 : 20
 	if (state.avgH == null) state.avgH = 50
 	subscribeSelected()
 }
