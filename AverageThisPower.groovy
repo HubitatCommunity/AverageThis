@@ -15,7 +15,7 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
-	public static String version()      {  return "v1.0"  }
+	public static String version()      {  return "v1.1"  }
 
 definition (
 	name: "AverageThisPower",
@@ -64,8 +64,8 @@ def powerHandler(evt) {
 	avP += Float.parseFloat(evt.value) / NSample
 	state.avgP = avP
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setPower"}) { settings.vDevice.setPower("${state.avgP.round(1)}"); sendEvent(name: "power", value: state.avgP, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	if(vDevice.supportedCommands.find{it.toString() == "setPower"}) { settings.vDevice.setPower("${state.avgP.round(1)}"); sendEvent(name: "power", value: state.avgP, unit: "W", displayed: true)  }
+	else { log.warn "Is Incorrect vDevice - no Power" }
 }
 
 def voltageHandler(evt) {
@@ -76,8 +76,8 @@ def voltageHandler(evt) {
 	avV += Float.parseFloat(evt.value) / NSample
 	state.avgV = avV
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setVoltage"}) { settings.vDevice.setVoltage("${state.avgV.round(1)}"); sendEvent(name: "voltage", value: state.avgV, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	if(vDevice.supportedCommands.find{it.toString() == "setVoltage"}) { settings.vDevice.setVoltage("${state.avgV.round(1)}"); sendEvent(name: "voltage", value: state.avgV, unit: "V", displayed: true)  }
+	else { log.warn "Is Incorrect vDevice - no Voltage" }
 }
 
 def currentHandler(evt) {
@@ -88,8 +88,8 @@ def currentHandler(evt) {
 	avC += Float.parseFloat(evt.value) / NSample
 	state.avgC = avC
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setCurrent"}) { settings.vDevice.current("${state.avgC.round(1)}"); sendEvent(name: "current", value: state.avgC, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	if(vDevice.supportedCommands.find{it.toString() == "setCurrent"}) { settings.vDevice.current("${state.avgC.round(1)}"); sendEvent(name: "current", value: state.avgC, unit: "A", displayed: true)  }
+	else { log.warn "Is Incorrect vDevice - no Current" }
 }
 
 def energyHandler(evt) {
@@ -101,7 +101,7 @@ def energyHandler(evt) {
 	state.avgE = avE
 	
 	if(vDevice.supportedCommands.find{it.toString() == "setEnergy"}) { settings.vDevice.setVoltage("${state.avgE.round(1)}"); sendEvent(name: "energy", value: state.avgE, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	else { log.warn "Is Incorrect vDevice - no Energy" }
 }
 
 def levelHandler(evt) {
@@ -113,7 +113,7 @@ def levelHandler(evt) {
 	state.avgL = avL
 	
 	if(vDevice.supportedCommands.find{it.toString() == "setLevel"}) { settings.vDevice.current("${state.avgL.round(1)}"); sendEvent(name: "level", value: state.avgL, displayed: true)  }
-	else { log.warn "Is Incorrect vDevice" }
+	else { log.warn "Is Incorrect vDevice - mo Level" }
 }
 
 
@@ -133,11 +133,11 @@ def updated() {
 
 def initialize() {
 	version()
-	// an inital value of 0 will take a long time to average out, thus avg is initialized to an arbitrary indoor average
-	if (state.avgP == null) state.avgP = 0
-	if (state.avgV == null) state.avgV = 0
-	if (state.avgC == null) state.avgC = 0
-	if (state.avgE == null) state.avgE = 0
+	// an inital value of 0 will take a long time to average out, thus avg is initialized to an arbitrary average
+	if (state.avgP == null) state.avgP = 20
+	if (state.avgV == null) state.avgV = 100
+	if (state.avgC == null) state.avgC = 1
+	if (state.avgE == null) state.avgE = 100
 	if (state.avgL == null) state.avgL = 0
 	subscribeSelected()
 }
