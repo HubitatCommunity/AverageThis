@@ -31,7 +31,7 @@
       "name": "AverageThisPower",
       "namespace": "csteele",
       "location": "https://raw.githubusercontent.com/HubitatCommunity/AverageThis/master/AverageThisPower.groovy",
-      "version": "1.1",
+      "version": "1.2",
       "oauth": false,
       "primary": false,
       "required": true
