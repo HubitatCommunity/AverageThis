@@ -15,7 +15,7 @@
  *  for the specific language governing permissions and limitations under the License.
  *
  */
-	public static String version()      {  return "v1.1"  }
+	public static String version()      {  return "v1.2"  }
 
 definition (
 	name: "AverageThisPower",
@@ -43,9 +43,9 @@ def subscribeSelected() {
 	{
 	    subscribe(theseSensors, "power", powerHandler)
 	    subscribe(theseSensors, "voltage", voltageHandler)
-	    subscribe(theseSensors, "current", currentdHandler)
-	    subscribe(theseSensors, "level", leveldHandler)
-	    subscribe(theseSensors, "energy", energydHandler)
+	    subscribe(theseSensors, "current", currentHandler)
+	    subscribe(theseSensors, "level", levelHandler)
+	    subscribe(theseSensors, "energy", energyHandler)
 	}
 }
 
