@@ -100,7 +100,7 @@ def energyHandler(evt) {
 	avE += Float.parseFloat(evt.value) / NSample
 	state.avgE = avE
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setEnergy"}) { settings.vDevice.setVoltage("${state.avgE.round(1)}"); sendEvent(name: "energy", value: state.avgE, displayed: true)  }
+	if(vDevice.supportedCommands.find{it.toString() == "setEnergy"}) { settings.vDevice.setEnergy("${state.avgE.round(1)}"); sendEvent(name: "energy", value: state.avgE, displayed: true)  }
 	else { log.warn "Is Incorrect vDevice - no Energy" }
 }
 
@@ -112,7 +112,7 @@ def levelHandler(evt) {
 	avL += Float.parseFloat(evt.value) / NSample
 	state.avgL = avL
 	
-	if(vDevice.supportedCommands.find{it.toString() == "setLevel"}) { settings.vDevice.current("${state.avgL.round(1)}"); sendEvent(name: "level", value: state.avgL, displayed: true)  }
+	if(vDevice.supportedCommands.find{it.toString() == "setLevel"}) { settings.vDevice.setLevel("${state.avgL.round(1)}"); sendEvent(name: "level", value: state.avgL, displayed: true)  }
 	else { log.warn "Is Incorrect vDevice - mo Level" }
 }
 
